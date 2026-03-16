@@ -4,6 +4,20 @@
 
 ---
 
+## 摘要
+
+WebAssembly（Wasm）作为 W3C 标准的可移植二进制指令格式，已在浏览器端高性能计算和基于 WASI 的微服务场景中获得广泛应用。Go 和 Rust 是 WebAssembly 生态中最受关注的两种系统级编程语言，但目前缺少在统一实验框架下对两者进行系统性对比的研究。本文设计并实现了一套涵盖浏览器端和 WASI 微服务端的基准测试方案，选取图像卷积、JSON 往返处理、SHA-256 哈希三类代表性工作负载共四个测试用例，分别使用 Go 标准编译器、TinyGo 和 Rust 三条工具链编译为 WebAssembly 模块，从编译特性（二进制体积、构建时间）、运行性能（实例化时间、执行时间、内存占用）和工程效率（代码行数、工具链复杂度）三个维度进行量化对比，并采用 Mann-Whitney U 检验验证差异的统计显著性。实验结果表明：Rust 产物体积最小（平均约 78 KB），在数据处理场景中执行速度领先 Go 3–33 倍、TinyGo 4–10 倍，且内存效率最优；TinyGo 借助 LLVM 后端优化，在计算密集型场景的执行时间上多数配置下优于 Rust 约 6%–11%，但其保守式垃圾回收导致内存占用极高（最高达 Rust 的约 40 倍）；Go 标准编译器工具链最为简洁，但产物体积最大（平均约 2.7 MB）且执行性能整体最慢。本文基于实验数据和生态成熟度分析，为不同应用场景下的 WebAssembly 语言与工具链选型提供了量化参考依据。
+
+**关键词：** WebAssembly；Go；Rust；TinyGo；性能基准测试；WASI；浏览器；工具链对比
+
+## Abstract
+
+WebAssembly (Wasm), a W3C-standardized portable binary instruction format, has been widely adopted for high-performance computation in browsers and microservice workloads via the WebAssembly System Interface (WASI). Go and Rust are among the most prominent systems programming languages targeting WebAssembly, yet a systematic comparison under a unified experimental framework remains lacking. This thesis designs and implements a benchmark suite spanning both browser and WASI environments, comprising four test cases across three representative workload types: image convolution (compute-intensive), JSON round-trip processing (data-intensive), and SHA-256 hashing (integer-compute-intensive). Each test case is compiled to WebAssembly using three toolchains — the Go standard compiler, TinyGo, and Rust — and evaluated along three dimensions: compilation characteristics (binary size, build time), runtime performance (instantiation time, execution time, memory usage), and engineering efficiency (source lines of code, toolchain complexity). Statistical significance is assessed using the Mann-Whitney U test. Results show that Rust produces the smallest binaries (~78 KB on average) and achieves 3–33× faster execution than Go and 4–10× faster than TinyGo in data-processing workloads, with the lowest memory footprint. TinyGo, leveraging its LLVM backend, outperforms Rust by approximately 6%–11% in execution time for most compute-intensive configurations, but its conservative garbage collector incurs extremely high memory consumption (up to ~40× that of Rust). The Go standard compiler offers the simplest toolchain but produces the largest binaries (~2.7 MB on average) and is generally the slowest in execution. Based on the experimental data and an analysis of ecosystem maturity, this thesis provides quantitative guidance for WebAssembly language and toolchain selection across different application scenarios.
+
+**Keywords:** WebAssembly; Go; Rust; TinyGo; performance benchmarking; WASI; browser; toolchain comparison
+
+---
+
 ## 第 1 章 绪论
 
 ### 1.1 研究背景

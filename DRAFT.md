@@ -28,6 +28,8 @@ WebAssembly (Wasm), a W3C-standardized portable binary instruction format, has b
 
 WebAssembly 的应用范围已远超浏览器。随着 WebAssembly 系统接口（WASI）的提出和发展 [4]，Wasm 模块可以在非浏览器环境中运行，涵盖 Serverless 函数、边缘计算节点、插件系统等场景。Scott Logic 的 State of WebAssembly 2023 调查显示，WebAssembly 的 Serverless 使用率已达约 40%，插件环境使用率约 30%，且均呈逐年增长趋势 [5]。WASI Preview 2（WASI 0.2）于 2024 年 1 月正式发布，引入了基于"世界"（worlds）的接口体系，包括 wasi-cli、wasi-http、wasi-filesystem 和 wasi-sockets 等标准化接口 [6]，进一步推动了 WebAssembly 在服务端和边缘场景中的应用。
 
+在规范演进层面，WebAssembly 技术在 2023 年取得了多项关键突破 [31]。WebAssembly GC（垃圾回收）提议和 Typed Function References 提议均进入标准化阶段（Phase 4），使 TypeScript、Kotlin、Java 等需要 GC 支持的高级语言能够更高效地编译至 Wasm，无需将语言虚拟机一同打包，从而显著减小了产物体积并提升了运行性能。Component Model（组件模型）提议也获得了社区的广泛支持，旨在解决多语言环境下 Wasm 模块间的互操作与数据共享问题；基于组件模型重新设计的 WASI Preview 2 正式上线。此外，Memory64、Multi-Memories、Exception Handling 等提议持续推进，wasi-threads 为 WASI 环境引入了多线程支持，wasi-nn 则为机器学习推理提供了标准化接口。这些进展表明 WebAssembly 正从浏览器沙箱中的性能加速器，发展为覆盖云原生、边缘计算、人工智能等广泛领域的通用计算平台 [31][32]。
+
 在编程语言支持方面，WebAssembly 作为编译目标可接受多种源语言。Hilbig 等人对 8,461 个真实世界 Wasm 二进制文件的大规模实证研究表明，C/C++、Rust 和 Go 是最主要的 Wasm 源语言，其中约三分之二的二进制文件来源于 C/C++ 等非内存安全语言 [7]。在众多可编译至 WebAssembly 的语言中，Go 和 Rust 因兼具系统级性能与现代语言特性而备受关注：Go 以简洁的语法、内置并发原语和成熟的标准库著称，在云原生领域有广泛应用；Rust 以零成本抽象、所有权系统和无垃圾回收器的内存安全保障为特色，在系统编程和性能敏感场景中表现突出。两种语言均已建立了各自的 WebAssembly 工具链生态：Go 自 1.11 版本起原生支持编译至 Wasm（`GOOS=js GOARCH=wasm`），自 1.21 版本起支持 WASI（`GOOS=wasip1`）[8]；TinyGo 作为 Go 的替代编译器专为嵌入式和 Wasm 场景优化 [9]；Rust 则于 2017 年底引入 `wasm32-unknown-unknown` 编译目标，并通过 wasm-bindgen [10] 和 wasm-pack 等工具提供了成熟的浏览器集成方案。
 
 然而，目前学术界和工程实践中对 Go 与 Rust 在 WebAssembly 应用开发中的系统性对比研究尚不充分。既有研究多集中于 Wasm 与原生代码或 JavaScript 的性能比较 [11]，或针对单一语言的 Wasm 编译特性分析，缺少在统一实验环境下对两种语言在 Wasm 开发全流程——编译产物、运行性能、开发效率——进行全面对比的工作。
@@ -53,6 +55,8 @@ WebAssembly 的性能特性是学术界关注的焦点。Haas 等人在 PLDI 201
 Hilbig 等人 [7] 对 8,461 个真实 Wasm 二进制文件的研究是目前规模最大的 Wasm 生态实证分析，揭示了 Web 端 Wasm 的实际用例分布：游戏（25%）、文本处理（11%）、可视化/动画（11%）、媒体处理（9%）等。该研究还发现曾经占主导地位的加密挖矿已降至不足 1%，Wasm 生态正朝着多元化方向发展。
 
 在 Serverless 场景中，Roadrunner 项目 [13] 的研究发现 Wasm Serverless 工作流中 97% 的数据传输涉及序列化开销，优化 JSON 序列化可实现 44–89% 的延迟降低和 69 倍的吞吐量提升，凸显了数据序列化在 Wasm 微服务中的关键地位。
+
+在工业实践方面，WebAssembly 已在多个领域获得规模化应用。Figma 将其 C++ 渲染引擎编译为 Wasm，使页面加载时间降低 3 倍 [32]；Adobe Photoshop Web 版利用 Wasm 实现了浏览器中的专业级图像处理；AutoCAD、Google Earth 等桌面应用也借助 Wasm 完成了向 Web 平台的迁移。2022 年，Docker 宣布支持 WebAssembly 工作负载，与 WasmEdge 合作构建了 containerd shim，使开发者可以像运行容器一样运行 Wasm 应用 [32]，标志着 WebAssembly 在云原生基础设施中的地位获得了行业巨头的认可。这一系列实践充分说明 WebAssembly 已从实验性技术进入生产就绪阶段，其性能、可移植性和安全隔离特性使之成为跨平台应用开发的重要基础设施。
 
 #### 1.3.3 Go 与 Rust 的 Wasm 支持研究
 
@@ -1284,7 +1288,7 @@ Go 和 TinyGo 均只需一条编译命令即可生成可用的 Wasm 模块，无
 
 ## 致谢
 
-（此处撰写致谢内容，感谢指导教师、答辩委员会、同学、家人等。）
+值此论文付梓之际，谨向我的指导老师致以最深切的谢忱。论文写作期间，承蒙老师悉心指点、不吝赐教，于治学之道启迪良多，获益匪浅。老师严谨笃实的学术风范与诲人不倦的师者襟怀，令我深受感佩，亦将铭记于心、受用终身。谨以此文，向所有在求学路上惠予关怀与鼓励的师长致以衷心的感谢。
 
 ---
 
@@ -1550,3 +1554,7 @@ make sizes
 [29] Rust and WebAssembly Working Group. "web-sys — Raw bindings to Web APIs." https://crates.io/crates/web-sys
 
 [30] Vadgama, N., Demir, N., & Pollard, B. "WebAssembly." *The 2025 Web Almanac*, HTTP Archive, 2025. https://almanac.httparchive.org/en/2025/webassembly
+
+[31] 黄文勇, 何良, 徐君. "WebAssembly 2023 年回顾与 2024 年展望." InfoQ, 2024. https://www.infoq.cn/article/5Zrq507bQW6lial5iVy1
+
+[32] 柴树杉. "WebAssembly 这七年——从诞生到 WASM 原生时代." 知乎专栏, 2022. https://zhuanlan.zhihu.com/p/573136334

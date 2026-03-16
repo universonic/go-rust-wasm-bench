@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>B1 — Image Convolution Benchmark</title>
+</head>
+<body>
+<pre id="log"></pre>
+<script>
+const log = (msg) => {
+  document.getElementById('log').textContent += msg + '\n';
+  console.log(msg);
+};
+
+(async () => {
+  const params = new URLSearchParams(location.search);
+  const tc = params.get('tc') || 'go';
+  const w  = parseInt(params.get('w')  || '256', 10);
+  const h  = parseInt(params.get('h')  || '256', 10);
+  const k  = parseInt(params.get('k')  || '3',   10);
+
+  log(`conv: tc=${tc} w=${w} h=${h} k=${k}`);
+
+  let runFn;
+  const t0 = performance.now();
+
+  if (tc === 'rust') {
+    const mod = await import('/build/rust-conv-browser/conv_browser.js');
+    await mod.default();
+    const t1 = performance.now();
+    window.__initTimeMs = t1 - t0;
+    runFn = (img) => mod.convolve(new Uint8Array(img), w, h, k);
+  } else {
+    const execJs = tc === 'tinygo'
+      ? '/harness/browser/wasm_exec_tinygo.js'
+      : '/harness/browser/wasm_exec_go.js';
+
+    await new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = execJs;
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+
+    const go = new Go();
+    const wasmUrl = `/build/conv-browser-${tc}.wasm`;
+    const result = await WebAssembly.instantiateStreaming(fetch(wasmUrl), go.importObject);
+    go.run(result.instance);
+
+    let tries = 0;
+    while (!window.wasmConvolve && tries++ < 200) {
+      await new Promise(r => setTimeout(r, 10));
+    }
+    const t1 = performance.now();
+    window.__initTimeMs = t1 - t0;
+
+    if (!window.wasmConvolve) throw new Error('wasmConvolve not registered');
+    runFn = (img) => window.wasmConvolve(new Uint8Array(img), w, h, k);
+  }
+
+  window.__run = (imgBuffer) => {
+    const result = runFn(imgBuffer);
+    return result instanceof Uint8Array ? result.buffer : result;
+  };
+
+  log(`init: ${window.__initTimeMs.toFixed(2)} ms`);
+  window.__ready = true;
+})().catch(e => {
+  log('ERROR: ' + e.message);
+  window.__error = e.message;
+});
+</script>
+</body>
+</html>

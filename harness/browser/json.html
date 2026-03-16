@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>B2 — JSON Round-trip Benchmark</title>
+</head>
+<body>
+<pre id="log"></pre>
+<script>
+const log = (msg) => {
+  document.getElementById('log').textContent += msg + '\n';
+  console.log(msg);
+};
+
+(async () => {
+  const params = new URLSearchParams(location.search);
+  const tc = params.get('tc') || 'go';
+  const n  = params.get('n')  || '100';
+
+  log(`json: tc=${tc} n=${n}`);
+
+  let runFn;
+  const t0 = performance.now();
+
+  if (tc === 'rust') {
+    const mod = await import('/build/rust-json-browser/json_browser.js');
+    await mod.default();
+    const t1 = performance.now();
+    window.__initTimeMs = t1 - t0;
+    runFn = (jsonStr) => mod.json_roundtrip(jsonStr);
+  } else {
+    const execJs = tc === 'tinygo'
+      ? '/harness/browser/wasm_exec_tinygo.js'
+      : '/harness/browser/wasm_exec_go.js';
+
+    await new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = execJs;
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+
+    const go = new Go();
+    const wasmUrl = `/build/json-browser-${tc}.wasm`;
+    const result = await WebAssembly.instantiateStreaming(fetch(wasmUrl), go.importObject);
+    go.run(result.instance);
+
+    let tries = 0;
+    while (!window.wasmJsonRoundtrip && tries++ < 200) {
+      await new Promise(r => setTimeout(r, 10));
+    }
+    const t1 = performance.now();
+    window.__initTimeMs = t1 - t0;
+
+    if (!window.wasmJsonRoundtrip) throw new Error('wasmJsonRoundtrip not registered');
+    runFn = (jsonStr) => window.wasmJsonRoundtrip(jsonStr);
+  }
+
+  window.__run = runFn;
+
+  log(`init: ${window.__initTimeMs.toFixed(2)} ms`);
+  window.__ready = true;
+})().catch(e => {
+  log('ERROR: ' + e.message);
+  window.__error = e.message;
+});
+</script>
+</body>
+</html>

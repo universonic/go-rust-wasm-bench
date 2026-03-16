@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "go-rust-wasm-bench",
+  "description": "Benchmark harness for Go vs Rust WebAssembly comparison",
+  "type": "module",
+  "scripts": {
+    "bench:browser": "node harness/browser/bench.mjs",
+    "bench:wasi": "bash harness/wasi/bench.sh",
+    "bench:build": "bash harness/build-time.sh"
+  },
+  "dependencies": {
+    "playwright": "^1.50.0"
+  }
+}

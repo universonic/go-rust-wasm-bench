@@ -1286,6 +1286,74 @@ Go 和 TinyGo 均只需一条编译命令即可生成可用的 Wasm 模块，无
 
 ---
 
+## 参考文献
+
+[1] Haas, A., Rossberg, A., Schuff, D. L., Titzer, B. L., et al. "Bringing the Web up to Speed with WebAssembly." *Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI)*, 2017. https://doi.org/10.1145/3062341.3062363
+
+[2] WebAssembly Community Group. "WebAssembly consensus and end of Browser Preview." February 2017. https://lists.w3.org/Archives/Public/public-webassembly/2017Feb/0002.html
+
+[3] W3C. "World Wide Web Consortium (W3C) brings a new language to the Web as WebAssembly becomes a W3C Recommendation." December 2019. https://www.w3.org/press-releases/2019/wasm/
+
+[4] Bytecode Alliance. Wasmtime Documentation — WASI. https://docs.wasmtime.dev/
+
+[5] Scott Logic. "The State of WebAssembly 2023." https://blog.scottlogic.com/2023/10/18/the-state-of-webassembly-2023.html
+
+[6] Bytecode Alliance. "WASI Preview 2 and the WebAssembly Component Model." https://component-model.bytecodealliance.org/
+
+[7] Hilbig, A., Lehmann, D., & Pradel, M. "An Empirical Study of Real-World WebAssembly Binaries: Security, Languages, Use Cases." *Proceedings of the Web Conference (WWW)*, 2021. https://doi.org/10.1145/3442381.3450138
+
+[8] The Go Team. Go WebAssembly Documentation. https://go.dev/wiki/WebAssembly
+
+[9] TinyGo Project. TinyGo Documentation. https://tinygo.org/docs/
+
+[10] Rust and WebAssembly Working Group. wasm-bindgen. https://github.com/rustwasm/wasm-bindgen
+
+[11] Jangda, A., Powers, B., Berger, E., Guha, A., & Larus, J. "Not So Fast: Analyzing the Performance of WebAssembly vs. Native Code." *USENIX Annual Technical Conference (ATC)*, 2019. https://www.usenix.org/conference/atc19/presentation/jangda
+
+[12] Korvoj, M. et al. "Lumos: Performance Characterization of WebAssembly as a Serverless Runtime in the Edge-Cloud Continuum." arXiv:2510.05118, 2024. https://arxiv.org/abs/2510.05118
+
+[13] "Roadrunner: Improving the Serverless Forwarding Layer for WebAssembly." arXiv:2511.01888, 2024. https://arxiv.org/abs/2511.01888
+
+[14] Karnwong, K. "Native implementation vs WASM for Go, Python and Rust benchmark." December 2024. https://karnwong.me/posts/2024/12/native-implementation-vs-wasm-for-go-python-and-rust-benchmark/
+
+[15] "Evaluating Legacy and Modern Cryptography on the Web: RSA, Hybrid AES and Ed25519 in Wasm and JavaScript." *Journal of Communications*, Vol. 20, No. 6, 2025. https://www.jocm.us/show-321-2118-1.html
+
+[16] WebAssembly Community Group. WebAssembly Core Specification. https://webassembly.org/
+
+[17] Bytecode Alliance. Wasmtime Documentation. https://docs.wasmtime.dev/
+
+[18] The Go Team. "Go 1.21 Release Notes." August 2023. https://go.dev/doc/go1.21
+
+[19] TinyGo Project. "Add support for GOOS=wasip1." Pull Request #3861. https://github.com/tinygo-org/tinygo/pull/3861
+
+[20] Fermyon. "Shrink Your TinyGo WebAssembly Modules by 60%." https://www.fermyon.com/blog/optimizing-tinygo-wasm
+
+[21] Crichton, A. "std: Add a new wasm32-unknown-unknown target." Rust Pull Request #45905, November 2017. https://github.com/rust-lang/rust/pull/45905
+
+[22] "Performance evaluation of image convolution with WebAssembly." *SPIE Proceedings*, Vol. 12592, 2023. https://doi.org/10.1117/12.2667004
+
+[23] The Rust Team. "Workspaces." *The Cargo Book*. https://doc.rust-lang.org/cargo/reference/workspaces.html
+
+[24] Tolnay, D. et al. "serde — Serialization framework for Rust." https://serde.rs/
+
+[25] Tolnay, D. et al. "serde_json — JSON support for Serde." https://github.com/serde-rs/json
+
+[26] Bray, T. "The JavaScript Object Notation (JSON) Data Interchange Format." RFC 8259, IETF, December 2017. https://www.rfc-editor.org/rfc/rfc8259
+
+[27] RustCrypto Contributors. "sha2 — SHA-2 hash functions." https://github.com/RustCrypto/hashes/tree/master/sha2
+
+[28] RustCrypto Project. https://github.com/RustCrypto
+
+[29] Rust and WebAssembly Working Group. "web-sys — Raw bindings to Web APIs." https://crates.io/crates/web-sys
+
+[30] Vadgama, N., Demir, N., & Pollard, B. "WebAssembly." *The 2025 Web Almanac*, HTTP Archive, 2025. https://almanac.httparchive.org/en/2025/webassembly
+
+[31] 黄文勇, 何良, 徐君. "WebAssembly 2023 年回顾与 2024 年展望." InfoQ, 2024. https://www.infoq.cn/article/5Zrq507bQW6lial5iVy1
+
+[32] 柴树杉. "WebAssembly 这七年——从诞生到 WASM 原生时代." 知乎专栏, 2022. https://zhuanlan.zhihu.com/p/573136334
+
+---
+
 ## 致谢
 
 值此论文付梓之际，谨向我的指导老师致以最深切的谢忱。论文写作期间，承蒙老师悉心指点、不吝赐教，于治学之道启迪良多，获益匪浅。老师严谨笃实的学术风范与诲人不倦的师者襟怀，令我深受感佩，亦将铭记于心、受用终身。谨以此文，向所有在求学路上惠予关怀与鼓励的师长致以衷心的感谢。
@@ -1490,71 +1558,3 @@ make sizes
 | `make sizes` | 统计二进制体积 | 终端输出 |
 | `make bench` | 执行全部基准测试 | `results/` |
 | `make clean` | 清除编译产物 | — |
-
----
-
-## 参考文献
-
-[1] Haas, A., Rossberg, A., Schuff, D. L., Titzer, B. L., et al. "Bringing the Web up to Speed with WebAssembly." *Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI)*, 2017. https://doi.org/10.1145/3062341.3062363
-
-[2] WebAssembly Community Group. "WebAssembly consensus and end of Browser Preview." February 2017. https://lists.w3.org/Archives/Public/public-webassembly/2017Feb/0002.html
-
-[3] W3C. "World Wide Web Consortium (W3C) brings a new language to the Web as WebAssembly becomes a W3C Recommendation." December 2019. https://www.w3.org/press-releases/2019/wasm/
-
-[4] Bytecode Alliance. Wasmtime Documentation — WASI. https://docs.wasmtime.dev/
-
-[5] Scott Logic. "The State of WebAssembly 2023." https://blog.scottlogic.com/2023/10/18/the-state-of-webassembly-2023.html
-
-[6] Bytecode Alliance. "WASI Preview 2 and the WebAssembly Component Model." https://component-model.bytecodealliance.org/
-
-[7] Hilbig, A., Lehmann, D., & Pradel, M. "An Empirical Study of Real-World WebAssembly Binaries: Security, Languages, Use Cases." *Proceedings of the Web Conference (WWW)*, 2021. https://doi.org/10.1145/3442381.3450138
-
-[8] The Go Team. Go WebAssembly Documentation. https://go.dev/wiki/WebAssembly
-
-[9] TinyGo Project. TinyGo Documentation. https://tinygo.org/docs/
-
-[10] Rust and WebAssembly Working Group. wasm-bindgen. https://github.com/rustwasm/wasm-bindgen
-
-[11] Jangda, A., Powers, B., Berger, E., Guha, A., & Larus, J. "Not So Fast: Analyzing the Performance of WebAssembly vs. Native Code." *USENIX Annual Technical Conference (ATC)*, 2019. https://www.usenix.org/conference/atc19/presentation/jangda
-
-[12] Korvoj, M. et al. "Lumos: Performance Characterization of WebAssembly as a Serverless Runtime in the Edge-Cloud Continuum." arXiv:2510.05118, 2024. https://arxiv.org/abs/2510.05118
-
-[13] "Roadrunner: Improving the Serverless Forwarding Layer for WebAssembly." arXiv:2511.01888, 2024. https://arxiv.org/abs/2511.01888
-
-[14] Karnwong, K. "Native implementation vs WASM for Go, Python and Rust benchmark." December 2024. https://karnwong.me/posts/2024/12/native-implementation-vs-wasm-for-go-python-and-rust-benchmark/
-
-[15] "Evaluating Legacy and Modern Cryptography on the Web: RSA, Hybrid AES and Ed25519 in Wasm and JavaScript." *Journal of Communications*, Vol. 20, No. 6, 2025. https://www.jocm.us/show-321-2118-1.html
-
-[16] WebAssembly Community Group. WebAssembly Core Specification. https://webassembly.org/
-
-[17] Bytecode Alliance. Wasmtime Documentation. https://docs.wasmtime.dev/
-
-[18] The Go Team. "Go 1.21 Release Notes." August 2023. https://go.dev/doc/go1.21
-
-[19] TinyGo Project. "Add support for GOOS=wasip1." Pull Request #3861. https://github.com/tinygo-org/tinygo/pull/3861
-
-[20] Fermyon. "Shrink Your TinyGo WebAssembly Modules by 60%." https://www.fermyon.com/blog/optimizing-tinygo-wasm
-
-[21] Crichton, A. "std: Add a new wasm32-unknown-unknown target." Rust Pull Request #45905, November 2017. https://github.com/rust-lang/rust/pull/45905
-
-[22] "Performance evaluation of image convolution with WebAssembly." *SPIE Proceedings*, Vol. 12592, 2023. https://doi.org/10.1117/12.2667004
-
-[23] The Rust Team. "Workspaces." *The Cargo Book*. https://doc.rust-lang.org/cargo/reference/workspaces.html
-
-[24] Tolnay, D. et al. "serde — Serialization framework for Rust." https://serde.rs/
-
-[25] Tolnay, D. et al. "serde_json — JSON support for Serde." https://github.com/serde-rs/json
-
-[26] Bray, T. "The JavaScript Object Notation (JSON) Data Interchange Format." RFC 8259, IETF, December 2017. https://www.rfc-editor.org/rfc/rfc8259
-
-[27] RustCrypto Contributors. "sha2 — SHA-2 hash functions." https://github.com/RustCrypto/hashes/tree/master/sha2
-
-[28] RustCrypto Project. https://github.com/RustCrypto
-
-[29] Rust and WebAssembly Working Group. "web-sys — Raw bindings to Web APIs." https://crates.io/crates/web-sys
-
-[30] Vadgama, N., Demir, N., & Pollard, B. "WebAssembly." *The 2025 Web Almanac*, HTTP Archive, 2025. https://almanac.httparchive.org/en/2025/webassembly
-
-[31] 黄文勇, 何良, 徐君. "WebAssembly 2023 年回顾与 2024 年展望." InfoQ, 2024. https://www.infoq.cn/article/5Zrq507bQW6lial5iVy1
-
-[32] 柴树杉. "WebAssembly 这七年——从诞生到 WASM 原生时代." 知乎专栏, 2022. https://zhuanlan.zhihu.com/p/573136334
